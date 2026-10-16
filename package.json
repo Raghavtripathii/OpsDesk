@@ -1,0 +1,17 @@
+{
+  "name": "opsdesk",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "server"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d db",
+    "db:psql": "docker compose exec db psql -U opsdesk -d opsdesk"
+  }
+}
