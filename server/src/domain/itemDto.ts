@@ -1,5 +1,5 @@
-import { roleCan, type Role } from '../auth/permissions.js';
 import { itemRef, type ItemKind, type ItemPriority, type ItemStatus } from './items.js';
+import { itemActions, type Actor } from './workflow.js';
 
 export interface ItemRow {
   id: number;
@@ -24,15 +24,6 @@ export interface ItemRow {
   is_stale: boolean;
 }
 
-export type ItemAction = 'comment' | 'claim';
-
-export function allowedActions(item: Pick<ItemRow, 'status' | 'owner_id'>, role: Role): ItemAction[] {
-  const actions: ItemAction[] = [];
-  if (roleCan(role, 'item:comment')) actions.push('comment');
-  if (item.status === 'open' && item.owner_id === null && roleCan(role, 'item:claim')) actions.push('claim');
-  return actions;
-}
-
 export function toListItem(row: ItemRow) {
   return {
     id: row.id,
@@ -55,10 +46,18 @@ export function toListItem(row: ItemRow) {
   };
 }
 
-export function toItemDetail(row: ItemRow, role: Role) {
+export function toItemDetail(row: ItemRow, actor: Actor) {
   return {
     ...toListItem(row),
     description: row.description ?? '',
-    allowedActions: allowedActions(row, role),
+    allowedActions: itemActions(
+      {
+        status: row.status,
+        ownerId: row.owner_id,
+        reporterId: row.reporter_id,
+        requiresApproval: row.requires_approval,
+      },
+      actor,
+    ),
   };
 }
