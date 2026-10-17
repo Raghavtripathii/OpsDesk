@@ -1,7 +1,9 @@
 import express from 'express';
 import { pool } from './db.js';
 import { errorHandler, notFoundHandler } from './errors.js';
+import { attentionRouter } from './routes/attention.js';
 import { authRouter } from './routes/auth.js';
+import { itemsRouter } from './routes/items.js';
 import { teamsRouter } from './routes/teams.js';
 
 export function createApp() {
@@ -17,6 +19,8 @@ export function createApp() {
 
   app.use('/api/auth', authRouter);
   app.use('/api/teams', teamsRouter);
+  app.use('/api/items', itemsRouter);
+  app.use('/api/attention', attentionRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
