@@ -8,6 +8,7 @@ export type Permission =
   | 'item:comment'
   | 'item:claim'
   | 'item:edit_own'
+  | 'item:edit_any'
   | 'item:assign'
   | 'item:change_priority'
   | 'item:approve';
@@ -21,7 +22,13 @@ const memberPermissions: Permission[] = [
   'item:edit_own',
 ];
 
-const leadPermissions: Permission[] = [...memberPermissions, 'item:assign', 'item:change_priority', 'item:approve'];
+const leadPermissions: Permission[] = [
+  ...memberPermissions,
+  'item:edit_any',
+  'item:assign',
+  'item:change_priority',
+  'item:approve',
+];
 
 const adminPermissions: Permission[] = [...leadPermissions, 'team:manage_members'];
 
