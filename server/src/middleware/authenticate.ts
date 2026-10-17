@@ -4,6 +4,11 @@ import { pool } from '../db.js';
 import { AppError } from '../errors.js';
 
 export async function authenticate(req: Request, _res: Response, next: NextFunction) {
+  if (req.user) {
+    next();
+    return;
+  }
+
   const header = req.header('authorization');
   const token = header?.startsWith('Bearer ') ? header.slice(7) : null;
   if (!token) throw new AppError(401, 'unauthenticated', 'Sign in required');
