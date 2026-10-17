@@ -57,7 +57,7 @@ export async function loadItemForUser(itemId: number, userId: number, permission
 
 export async function getItem(itemId: number, userId: number) {
   const { row, role } = await loadItemForUser(itemId, userId, 'item:view');
-  return toItemDetail(row, role);
+  return toItemDetail(row, { userId, role });
 }
 
 export async function createItem(userId: number, teamId: number, input: NewItemInput) {
@@ -155,7 +155,7 @@ export async function claimItem(itemId: number, userId: number) {
     });
   }
 
-  return { item: toItemDetail(row, role), changed };
+  return { item: toItemDetail(row, { userId, role }), changed };
 }
 
 export async function addComment(itemId: number, author: { id: number; name: string }, body: string) {
