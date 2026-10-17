@@ -2,8 +2,8 @@ import { Router, type Request, type Response } from 'express';
 import { z } from 'zod';
 import { listViews } from '../domain/itemQuery.js';
 import { itemKinds, itemPriorities, itemStatuses } from '../domain/items.js';
-import { AppError } from '../errors.js';
 import { authenticate, currentUser } from '../middleware/authenticate.js';
+import { setEtag } from '../middleware/ifMatch.js';
 import { limitSchema } from '../pagination.js';
 import {
   addComment,
@@ -13,6 +13,8 @@ import {
   listItemsForUser,
   listTimeline,
 } from '../services/itemService.js';
+import { itemMutationsRouter } from './itemMutations.js';
+import { itemIdFrom } from './params.js';
 
 function splitList(value: string): string[] {
   return value
@@ -50,12 +52,6 @@ const commentSchema = z.object({
   body: z.string().trim().min(1).max(5000),
 });
 
-function itemIdFrom(req: Request): number {
-  const id = Number(req.params.itemId);
-  if (!Number.isSafeInteger(id) || id <= 0) throw new AppError(404, 'not_found', 'Work item not found');
-  return id;
-}
-
 export async function createItemHandler(req: Request, res: Response) {
   const user = currentUser(req);
   const teamId = Number(req.params.teamId);
@@ -69,12 +65,14 @@ export async function createItemHandler(req: Request, res: Response) {
     dueAt: input.dueAt ?? null,
   });
 
+  setEtag(res, item.version);
   res.status(201).json({ item });
 }
 
 export const itemsRouter = Router();
 
 itemsRouter.use(authenticate);
+itemsRouter.use(itemMutationsRouter);
 
 itemsRouter.get('/', async (req, res) => {
   const user = currentUser(req);
@@ -100,6 +98,7 @@ itemsRouter.get('/', async (req, res) => {
 
 itemsRouter.get('/:itemId', async (req, res) => {
   const item = await getItem(itemIdFrom(req), currentUser(req).id);
+  setEtag(res, item.version);
   res.json({ item });
 });
 
@@ -118,5 +117,6 @@ itemsRouter.post('/:itemId/comments', async (req, res) => {
 
 itemsRouter.post('/:itemId/claim', async (req, res) => {
   const result = await claimItem(itemIdFrom(req), currentUser(req).id);
+  setEtag(res, result.item.version);
   res.json(result);
 });
