@@ -6,6 +6,8 @@ import { idempotency } from './middleware/idempotency.js';
 import { attentionRouter } from './routes/attention.js';
 import { authRouter } from './routes/auth.js';
 import { itemsRouter } from './routes/items.js';
+import { notificationsRouter } from './routes/notifications.js';
+import { streamRouter } from './routes/stream.js';
 import { teamsRouter } from './routes/teams.js';
 
 export function createApp() {
@@ -22,7 +24,9 @@ export function createApp() {
   app.use('/api/auth', authRouter);
   app.use('/api/teams', authenticate, idempotency, teamsRouter);
   app.use('/api/items', authenticate, idempotency, itemsRouter);
+  app.use('/api/notifications', authenticate, idempotency, notificationsRouter);
   app.use('/api/attention', attentionRouter);
+  app.use('/api/stream', streamRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
