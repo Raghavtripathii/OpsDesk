@@ -26,6 +26,7 @@
     "start": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "migrate": "tsx src/migrate.ts",
-    "seed": "tsx src/seed.ts"
+    "seed": "tsx src/seed.ts",
+    "worker": "tsx watch src/worker.ts"
   }
 }
