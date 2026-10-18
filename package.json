@@ -17,6 +17,7 @@
     "migrate": "npm run migrate --workspace server",
     "seed": "npm run seed --workspace server",
     "typecheck": "npm run typecheck --workspace server",
-    "worker": "npm run worker --workspace server"
+    "worker": "npm run worker --workspace server",
+    "test": "npm run test --workspace server"
   }
 }
