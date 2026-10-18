@@ -333,6 +333,7 @@ async function seed() {
       [memberUsers, memberTeams, memberRoles],
     );
 
+    await client.query("SET LOCAL opsdesk.skip_outbox = 'on'");
     await client.query(insertItemsSql, [itemTotal]);
     await client.query(insertCommentsSql);
     await client.query(insertEventsSql);
