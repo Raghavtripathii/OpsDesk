@@ -43,7 +43,7 @@ closed and cancelled are final.
 
 - Roles are per team: member, lead, admin.
 - A user may belong to several teams with a different role in each.
-- A small number of organisation admins can create teams and users.
+- Teams and users are created by the seed script. An organisation admin flag exists on users but gives no access to a team's work, and there are no endpoints for creating teams or users. Team admins manage membership of their own team.
 - A user can only see and act on items of teams they belong to. For anyone else, an item or team does not exist (404), so nothing leaks.
 - Members: view, create, comment, claim unowned items, edit items they own or reported.
 - Leads: everything a member can do, plus edit any item, assign, change priority, and approve.
