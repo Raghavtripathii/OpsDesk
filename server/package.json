@@ -30,6 +30,8 @@
     "seed": "tsx src/seed.ts",
     "worker": "tsx watch src/worker.ts",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "demo:race": "tsx scripts/race-demo.ts",
+    "bench": "tsx scripts/benchmark.ts"
   }
 }
