@@ -20,3 +20,16 @@ npm run db:up
 ```
 
 Assumptions are documented in `docs/ASSUMPTIONS.md`.
+## Run everything (development)
+
+```
+npm install
+npm run migrate
+npm run seed
+npm run dev        # API on :4000
+npm run worker     # notifications worker (second terminal)
+npm run dev:web    # web app on http://localhost:5173 (third terminal)
+```
+
+The web dev server proxies `/api` to the API, so no CORS setup is needed.
+Sign in with `lead@opsdesk.test` / `password123` (more accounts are printed by the seed script).
